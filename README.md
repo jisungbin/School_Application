@@ -15,7 +15,7 @@
 ## Use Library
 [[NEIS API]](https://github.com/agemor/neis-api)
 
-## License
+## License [[LICENSE]](https://github.com/sungbin5304/School_Application/blob/master/LICENSE)
 ```
                   GNU LESSER GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
@@ -29,4 +29,6 @@
 the terms and conditions of version 3 of the GNU General Public
 License, supplemented by the additional permissions listed below.
 ```
-[[LICENSE]](https://github.com/sungbin5304/School_Application/blob/master/LICENSE)
+
+## NEIS API License
+> [[LICENSE]](https://github.com/agemor/neis-api/blob/master/LICENSE)
