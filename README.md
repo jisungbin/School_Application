@@ -25,5 +25,5 @@
   This version of the GNU Lesser General Public License incorporates
 the terms and conditions of version 3 of the GNU General Public
 License, supplemented by the additional permissions listed below.
-[[LICENSE]](https://github.com/sungbin5304/School_Application/blob/master/LICENSE)
+![[LICENSE]](https://github.com/sungbin5304/School_Application/blob/master/LICENSE)
 ```
