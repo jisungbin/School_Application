@@ -13,7 +13,7 @@
 > 귀여운 화베
 
 ## License
-<pre><code>
+```
     School Application  Copyright (C) 2018  SungBin5304
     This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
     This is free software, and you are welcome to redistribute it
@@ -34,4 +34,4 @@ may consider it more useful to permit linking proprietary applications with
 the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 <https://www.gnu.org/licenses/why-not-lgpl.html>.
-</code></pre>
+```
