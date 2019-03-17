@@ -12,7 +12,7 @@
 ## Special Thanks
 > 귀여운 화베
 
-## Uuse Library
+## Use Library
 [[NEIS API]](https://github.com/agemor/neis-api)
 
 ## License
