@@ -29,6 +29,8 @@
 the terms and conditions of version 3 of the GNU General Public
 License, supplemented by the additional permissions listed below.
 ```
+## Font License
+> [[LICENSE]](https://github.com/sungbin5304/School_Application/blob/master/FONT%20LICENSE)
 
 ## NEIS API License
 > [[LICENSE]](https://github.com/agemor/neis-api/blob/master/LICENSE)
