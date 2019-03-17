@@ -1,4 +1,4 @@
-# School_Application
+# School Application
 서령고등학교 2학년 3반 시간표와 학교 급식표가 있는 어플리케이션 입니다.
 
 ![Image](https://img.shields.io/badge/School-Meal-blue.svg)
@@ -11,6 +11,9 @@
 
 ## Special Thanks
 > 귀여운 화베
+
+## Uuse Library
+[[NEIS API]](https://github.com/agemor/neis-api)
 
 ## License
 ```
