@@ -21,10 +21,12 @@ import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import com.sungbin.school.app.utils.Utils
 import android.support.v4.content.ContextCompat
+import android.widget.Toast
 import com.sungbin.school.app.R
+import com.sungbin.school.app.listener.OnSwipeTouchListener
 
 
-class food : Fragment() {
+class fragment_food : Fragment() {
 
     var mealLoadDay:Int? = null
     var mealLoadYear:Int? = null
@@ -147,6 +149,16 @@ class food : Fragment() {
                 MealTask().execute()
             }
         }
+
+        meal.setOnTouchListener(object : OnSwipeTouchListener(context!!) {
+            override fun onSwipeLeftToRight() {
+                pre_day.performClick()
+            }
+
+            override fun onSwipeRightToLeft() {
+                next_day.performClick()
+            }
+        })
 
     }
 
