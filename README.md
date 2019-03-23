@@ -1,5 +1,5 @@
 # School Application
-서령고등학교 2학년 3반 시간표와 학교 급식표가 있는 어플리케이션 입니다.
+학급 시간표와 학교 급식표, 학사 일정을 보여주는 어플리케이션 입니다.
 
 ![Image](https://img.shields.io/badge/School-Meal-blue.svg)
 ![Image](https://img.shields.io/badge/School-Plan-green.svg)
