@@ -221,7 +221,7 @@ class fragment_food : Fragment() {
         override fun doInBackground(vararg params: Void?): Void? {
             if(permissionCheck == PackageManager.PERMISSION_GRANTED /* 파일 쓰기 권한 있음 */
                 && !Utils.read("Meal Data/$mealLoadYear-$mealLoadMonth.data", "null").equals("null")) { /* 저장된 파일이 있음 */
-                textMenu = Utils.read("Meal Data/$mealLoadYear-$mealLoadMonth.data", "파일 오류!")
+                textMenu = Utils.decodeBase64(Utils.read("Meal Data/$mealLoadYear-$mealLoadMonth.data", "파일 오류!"))
                 isText = true
                 return null
             }
@@ -261,7 +261,7 @@ class fragment_food : Fragment() {
                 PackageManager.PERMISSION_GRANTED ->{ //권한 수락
                     if(Utils.read("Meal Data/$mealLoadYear-$mealLoadMonth.data", "null").equals("null")) {
                         Utils.createFolder("Meal Data");
-                        Utils.save("Meal Data/$mealLoadYear-$mealLoadMonth.data", content)
+                        Utils.save("Meal Data/$mealLoadYear-$mealLoadMonth.data", Utils.endcodeBase64(content))
                         Utils.toast(context, "급식 정보가 저장되었습니다.");
                     }
                 }

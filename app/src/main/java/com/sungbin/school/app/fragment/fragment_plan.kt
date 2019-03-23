@@ -35,7 +35,6 @@ class fragment_plan : Fragment() {
         next_day.visibility = View.INVISIBLE
 
         Glide.with(this).load(R.drawable.plan).into(plan_image)
-
     }
 
 }
