@@ -1,29 +1,33 @@
 package com.sungbin.school.app.fragment
 
 import android.Manifest
+import android.app.DatePickerDialog
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
+import android.support.v4.widget.SwipeRefreshLayout
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.TextView
 import cn.pedant.SweetAlert.SweetAlertDialog
+import com.gun0912.tedpermission.PermissionListener
+import com.gun0912.tedpermission.TedPermission
+import com.sungbin.school.app.R
+import com.sungbin.school.app.activity.MainActivity
+import com.sungbin.school.app.listener.OnSwipeTouchListener
 import com.sungbin.school.app.school.School
 import com.sungbin.school.app.school.SchoolMenu
+import com.sungbin.school.app.utils.Utils
 import kotlinx.android.synthetic.main.navigation_meal.*
 import java.text.SimpleDateFormat
 import java.util.*
-import android.app.DatePickerDialog
-import android.content.pm.PackageManager
-import com.gun0912.tedpermission.PermissionListener
-import com.gun0912.tedpermission.TedPermission
-import com.sungbin.school.app.utils.Utils
-import android.support.v4.content.ContextCompat
-import android.widget.Toast
-import com.sungbin.school.app.R
-import com.sungbin.school.app.listener.OnSwipeTouchListener
 
 
 class fragment_food : Fragment() {
@@ -31,6 +35,10 @@ class fragment_food : Fragment() {
     var mealLoadDay:Int? = null
     var mealLoadYear:Int? = null
     var mealLoadMonth:Int? = null
+
+    lateinit var next_day: ImageButton
+    lateinit var pre_day: ImageButton
+    lateinit var info: TextView
 
     var permissionlistener: PermissionListener = object : PermissionListener {
         override fun onPermissionGranted() { //수락
@@ -49,9 +57,13 @@ class fragment_food : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        info = (context as MainActivity).info!!
+        pre_day = (context as MainActivity).pre_day!!
+        next_day = (context as MainActivity).next_day!!
+
         var dateSetListener:DatePickerDialog.OnDateSetListener? = null
         dateSetListener = DatePickerDialog.OnDateSetListener { datePicker, year, month, day ->
-            date.text = year.toString() + "-" + (month + 1).toString() +"-" + day.toString()
+            info.text = year.toString() + "-" + (month + 1).toString() +"-" + day.toString()
             mealLoadMonth = month + 1
             mealLoadDay = day
             mealLoadYear = year
@@ -59,22 +71,25 @@ class fragment_food : Fragment() {
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            date.typeface = resources.getFont(R.font.sunflower_light)
+            info.typeface = resources.getFont(R.font.sunflower_light)
             meal.typeface = resources.getFont(R.font.sunflower_medium)
         }
+
+        pre_day.visibility = View.VISIBLE
+        next_day.visibility = View.VISIBLE
 
         mealLoadMonth = getTime("MM").toInt()
         mealLoadDay = getTime("dd").toInt()
         mealLoadYear = getTime("yyyy").toInt()
 
-        date.text ="$mealLoadYear-$mealLoadMonth-$mealLoadDay"
+        info.text ="$mealLoadYear-$mealLoadMonth-$mealLoadDay"
 
         MealTask().execute()
 
-        date.setOnClickListener {
-            val year = date.text.split("-")[0].toString().toInt()
-            val month = date.text.split("-")[1].toString().toInt() - 1
-            val day = date.text.split("-")[2].toString().toInt()
+        info.setOnClickListener {
+            val year = info.text.split("-")[0].toString().toInt()
+            val month = info.text.split("-")[1].toString().toInt() - 1
+            val day = info.text.split("-")[2].toString().toInt()
 
             val dialog = DatePickerDialog(context!!, dateSetListener, year, month, day)
             dialog.window.attributes.windowAnimations = R.style.DialogAnimation
@@ -82,9 +97,9 @@ class fragment_food : Fragment() {
         }
 
         next_day.setOnClickListener { //날짜 앞으로 가기
-            var year = date.text.split("-")[0].toString().toInt()
-            var month = date.text.split("-")[1].toString().toInt()
-            var day = date.text.split("-")[2].toString().toInt()
+            var year = info.text.split("-")[0].toString().toInt()
+            var month = info.text.split("-")[1].toString().toInt()
+            var day = info.text.split("-")[2].toString().toInt()
             var lastday = (AllDay(year, month + 1, day) - AllDay(year, month, day)).toInt()
 
             if(day == lastday){ //막날에 다음날 눌렀을때
@@ -106,15 +121,15 @@ class fragment_food : Fragment() {
             mealLoadMonth = month
             mealLoadDay = day
 
-            date.text ="$mealLoadYear-$mealLoadMonth-$mealLoadDay"
+            info.text ="$mealLoadYear-$mealLoadMonth-$mealLoadDay"
 
             MealTask().execute()
         }
 
         pre_day.setOnClickListener { //날짜 뒤로가기
-            var year = date.text.split("-")[0].toString().toInt()
-            var month = date.text.split("-")[1].toString().toInt()
-            var day = date.text.split("-")[2].toString().toInt()
+            var year = info.text.split("-")[0].toString().toInt()
+            var month = info.text.split("-")[1].toString().toInt()
+            var day = info.text.split("-")[2].toString().toInt()
 
             if(day == 1){ //1일에 뒤로가기 -> 전달 막날로
                 if(month == 1){
@@ -133,7 +148,7 @@ class fragment_food : Fragment() {
                 mealLoadMonth = month
                 mealLoadDay = lastday
 
-                date.text ="$mealLoadYear-$mealLoadMonth-$mealLoadDay"
+                info.text ="$mealLoadYear-$mealLoadMonth-$mealLoadDay"
 
                 MealTask().execute()
             }
@@ -144,12 +159,13 @@ class fragment_food : Fragment() {
                 mealLoadMonth = month
                 mealLoadDay = day
 
-                date.text ="$mealLoadYear-$mealLoadMonth-$mealLoadDay"
+                info.text ="$mealLoadYear-$mealLoadMonth-$mealLoadDay"
 
                 MealTask().execute()
             }
         }
 
+        meal.movementMethod = ScrollingMovementMethod()
         meal.setOnTouchListener(object : OnSwipeTouchListener(context!!) {
             override fun onSwipeLeftToRight() {
                 pre_day.performClick()
@@ -158,6 +174,19 @@ class fragment_food : Fragment() {
             override fun onSwipeRightToLeft() {
                 next_day.performClick()
             }
+        })
+
+        swipe.setColorSchemeResources(
+            R.color.colorAccent,
+            R.color.colorPrimary,
+            R.color.colorPrimaryDark,
+            R.color.colorPrimary
+        )
+
+        swipe.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
+            swipe.isRefreshing = false
+            Utils.delete("Meal Data/$mealLoadYear-$mealLoadMonth.data")
+            MealTask().execute()
         })
 
     }
@@ -182,17 +211,17 @@ class fragment_food : Fragment() {
             dialog!!.progressHelper.barColor = Color.parseColor("#64b5f6")
             dialog!!.titleText = "\n\n급식 불러오는 중..."
             dialog!!.setCancelable(false)
-            if(permissionCheck == PackageManager.PERMISSION_DENIED
-                || (permissionCheck == PackageManager.PERMISSION_GRANTED &&
+            if(permissionCheck == PackageManager.PERMISSION_DENIED /* 파일 쓰기 권한 없음 */
+                || (permissionCheck == PackageManager.PERMISSION_GRANTED && /* 파일 쓰기 권한은 있지만, 저장된 급식 파일이 없음 */
                         Utils.read("Meal Data/$mealLoadYear-$mealLoadMonth.data", "null").equals("null"))) {
                  dialog!!.show()
             }
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
-            if(permissionCheck == PackageManager.PERMISSION_GRANTED
-                && !Utils.read("Meal Data/$mealLoadYear-$mealLoadMonth.data", "null").equals("null")) {
-                textMenu = Utils.read("Meal Data/$mealLoadYear-$mealLoadMonth.data", "null")
+            if(permissionCheck == PackageManager.PERMISSION_GRANTED /* 파일 쓰기 권한 있음 */
+                && !Utils.read("Meal Data/$mealLoadYear-$mealLoadMonth.data", "null").equals("null")) { /* 저장된 파일이 있음 */
+                textMenu = Utils.read("Meal Data/$mealLoadYear-$mealLoadMonth.data", "파일 오류!")
                 isText = true
                 return null
             }
@@ -226,11 +255,7 @@ class fragment_food : Fragment() {
 
             meal.text = show_content
 
-            if(permissionCheck == PackageManager.PERMISSION_DENIED
-                || (permissionCheck == PackageManager.PERMISSION_GRANTED &&
-                        Utils.read("Meal Data/$mealLoadYear-$mealLoadMonth.data", "null").equals("null"))) {
-                dialog!!.cancel()
-            }
+            if(dialog!!.isShowing) dialog!!.cancel()
 
             when(permissionCheck) {
                 PackageManager.PERMISSION_GRANTED ->{ //권한 수락
