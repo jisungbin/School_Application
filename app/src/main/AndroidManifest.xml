@@ -27,6 +27,14 @@
             </intent-filter>
         </activity>
 
+        <receiver android:name=".listener.AlarmServiceListener">
+            <intent-filter>
+                <action android:name="MealAlarmServiceListener"/>
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".service.MealAlarmService"/>
+
         <activity
                 android:label="@string/app_name"
                 android:theme="@style/AppTheme.NoActionBar"

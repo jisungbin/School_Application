@@ -1,7 +1,11 @@
 package com.sungbin.school.app.fragment
 
 import android.Manifest
+import android.app.AlarmManager
 import android.app.DatePickerDialog
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.AsyncTask
@@ -189,6 +193,46 @@ class fragment_food : Fragment() {
             MealTask().execute()
         })
 
+        var calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, 7)
+        calendar.set(Calendar.MINUTE, 30)
+        calendar.set(Calendar.SECOND, 0)
+
+        var alarmIntent = Intent("MealAlarmServiceListener")
+            .putExtra("mealLoadYear", mealLoadYear!!)
+            .putExtra("mealLoadMonth", mealLoadMonth!!)
+            .putExtra("mealLoadDay", mealLoadDay!!)
+        var pendingIntent = PendingIntent.getBroadcast(
+            context,
+            0,
+            alarmIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT)
+
+        var alarmManager = context!!.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                alarmManager.setExact(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.timeInMillis,
+                    pendingIntent
+                )
+            }
+            else {
+                alarmManager.set(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.timeInMillis,
+                    pendingIntent
+                )
+            }
+        }
+        else {
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                pendingIntent
+            )
+        }
     }
 
     fun getTime(type:String): String{
@@ -220,8 +264,8 @@ class fragment_food : Fragment() {
 
         override fun doInBackground(vararg params: Void?): Void? {
             if(permissionCheck == PackageManager.PERMISSION_GRANTED /* 파일 쓰기 권한 있음 */
-                && !Utils.read("Meal Data/$mealLoadYear-$mealLoadMonth.data", "null").equals("null")) { /* 저장된 파일이 있음 */
-                textMenu = Utils.decodeBase64(Utils.read("Meal Data/$mealLoadYear-$mealLoadMonth.data", "파일 오류!"))
+                && !Utils.read("Meal Data/$mealLoadYear-$mealLoadMonth.data", "null").equals ("null")) { /* 저장된 파일이 있음 */
+                textMenu = Utils.read("Meal Data/$mealLoadYear-$mealLoadMonth.data", "파일 오류!")
                 isText = true
                 return null
             }
@@ -261,7 +305,7 @@ class fragment_food : Fragment() {
                 PackageManager.PERMISSION_GRANTED ->{ //권한 수락
                     if(Utils.read("Meal Data/$mealLoadYear-$mealLoadMonth.data", "null").equals("null")) {
                         Utils.createFolder("Meal Data");
-                        Utils.save("Meal Data/$mealLoadYear-$mealLoadMonth.data", Utils.endcodeBase64(content))
+                        Utils.save("Meal Data/$mealLoadYear-$mealLoadMonth.data", content)
                         Utils.toast(context, "급식 정보가 저장되었습니다.");
                     }
                 }
@@ -302,6 +346,5 @@ class fragment_food : Fragment() {
         }
         return count
     }
-
 
 }

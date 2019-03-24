@@ -1,13 +1,13 @@
 package com.sungbin.school.app.utils
 
-import android.os.Environment
-import java.io.File
-import java.io.BufferedReader
-import java.io.FileInputStream
-import java.io.InputStreamReader
 import android.content.Context
+import android.os.Environment
 import android.util.Log
 import android.widget.Toast
+import java.io.BufferedReader
+import java.io.File
+import java.io.FileInputStream
+import java.io.InputStreamReader
 
 
 object Utils{
@@ -19,7 +19,13 @@ object Utils{
     }
 
     fun decodeBase64(text:String): String{
-        return android.util.Base64.decode(text, 0).toString()
+        try {
+            return android.util.Base64.decode(text, 0).toString()
+        }
+        catch (e:Exception){
+            Log.d("ERROR", e.toString())
+            return ""
+        }
     }
 
     fun createFolder(name:String){
