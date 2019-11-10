@@ -6,7 +6,7 @@
 ![Image](https://img.shields.io/badge/School-Notice-pink.svg)
 
 ## Developed by
-![Image](https://raw.githubusercontent.com/sungbin5304/New-Kakaotalk-Bot-2/master/sungbin.png)
+![Image](https://raw.githubusercontent.com/sungbin5304/NewAutoReplyBot-Helper/master/IMAGE/sungbin.png)
 > SungBin
 
 ## Special Thanks
