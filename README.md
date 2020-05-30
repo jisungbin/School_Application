@@ -1,3 +1,11 @@
+# DEPRECATED
+MOVED PROJECT
+<br>
+[[SchoolApp]](https://github.com/sungbin5304/SchoolApp)
+<br><br><br><br><br><br><br><br><br><br><br>
+-----
+
+
 # School Application
 학급 시간표와 학교 급식표, 학사 일정을 보여주는 어플리케이션 입니다.
 
